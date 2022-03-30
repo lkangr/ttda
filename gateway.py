@@ -4,11 +4,11 @@ import time
 import  sys
 from  Adafruit_IO import  MQTTClient
 
-AIO_FEED_IDS = ["bbc-tem", "bbc-hum", "bbc-relay"]
+AIO_FEED_IDS = ["bbc-tem", "bbc-hum", "bbc-relay", "bbc-relay1"]
 
 
 AIO_USERNAME = "lkangr"
-AIO_KEY = "aio_Dukp25RQJ1KhHo3qI6V8NSkyVTar"
+AIO_KEY = "aio_mxQt20XKjNM5wkEiNoZkfkYcHbav"
 
 def connected(client):
     print("Ket noi thanh cong...")
@@ -25,7 +25,10 @@ def  disconnected(client):
 def  message(client , feed_id , payload):
     print("Nhan du lieu: " + payload)
     if isMicrobitConnected:
-        ser.write((str(payload) + "#").encode())
+        if feed_id == "bbc-relay":
+            ser.write(("f" + str(payload) + "#").encode())
+        elif feed_id == "bbc-relay1":
+            ser.write(("w" + str(payload) + "#").encode())
 
 client = MQTTClient(AIO_USERNAME , AIO_KEY)
 client.on_connect = connected
